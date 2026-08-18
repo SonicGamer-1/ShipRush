@@ -1,0 +1,45 @@
+#include <raylib.h>
+#include <raymath.h>
+#include <vector>
+
+#include "player.h"
+#include "bullet.h"
+
+const int WIN_HEIGHT = 900;
+const int WIN_WIDTH = 1600;
+
+int main()
+{
+    InitWindow(WIN_WIDTH, WIN_HEIGHT, "Platformer");
+    SetTargetFPS(60);
+
+    Player player;
+    Player enemy;
+
+    std::vector<Bullet> bullets;
+    std::vector<Bullet> enemBullets;
+
+    player.load();
+    enemy.load();
+    enemy.position.y = 100;
+
+    float dt = 0;
+
+    while (!WindowShouldClose())
+    {
+        dt = GetFrameTime();
+        player.update(dt);
+
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        player.render();
+        enemy.render();
+
+        EndDrawing();
+    }
+
+    player.unload();
+    CloseWindow();
+    return 0;
+}
