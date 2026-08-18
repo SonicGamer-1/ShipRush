@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     }
 
     InitWindow(1600, 900, mode == 'h' ? "P2P Game - Peer A" : "P2P Game - Peer B");
-    SetTargetFPS(60);
+    SetTargetFPS(120);
 
     NetworkManager netManager;
     if (!netManager.initialize(mode))

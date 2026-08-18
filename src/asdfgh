@@ -28,7 +28,7 @@ int main()
     while (!WindowShouldClose())
     {
         dt = GetFrameTime();
-        player.update(dt);
+        player.update(dt, false);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
