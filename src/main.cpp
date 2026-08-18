@@ -45,13 +45,15 @@ int main(int argc, char *argv[])
         float dt = GetFrameTime();
 
         // 1. Both peers update their OWN player locally with zero lag
-        localPlayer.update(dt);
+        localPlayer.update(dt, false);
 
         // 2. Receive position & angle updates from the other peer
         netManager.serviceNetwork(remotePeerPlayer);
 
         // 3. Transmit local position & angle to the other peer
         netManager.sendLocalState(localPlayer);
+
+        remotePeerPlayer.update(dt, true);
 
         // 4. Render
         BeginDrawing();

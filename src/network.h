@@ -95,7 +95,7 @@ public:
 
                     // Directly apply the received transform onto the remote peer entity
                     remotePeerPlayer.position = state->position;
-                    remotePeerPlayer.position = state->velocity;
+                    remotePeerPlayer.velocity = state->velocity;
                     remotePeerPlayer.angle = state->angle;
                 }
                 enet_packet_destroy(event.packet);

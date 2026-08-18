@@ -41,7 +41,7 @@ public:
     Texture2D texture;
 
     void load();
-    void update(float dt);
+    void update(float dt, bool peer);
     void render();
     void unload();
 };
