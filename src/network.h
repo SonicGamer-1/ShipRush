@@ -8,10 +8,13 @@
 #include <raylib.h>
 #include <iostream>
 #include <cstdint>
+#include <cstring>
 
 #include "player.h"
 
 #pragma pack(push, 1)
+
+std::string ip = "127.0.0.1";
 
 enum PacketType : uint8_t
 {
@@ -23,6 +26,7 @@ struct PeerStatePacket
 {
     uint8_t type = PACKET_P2P_STATE;
     Vector2 position;
+    Vector2 velocity;
     float angle;
 };
 
@@ -62,7 +66,7 @@ public:
         {
             // Peer B: Connects to Peer A on port 12345
             host = enet_host_create(nullptr, 1, 2, 0, 0);
-            enet_address_set_host_ip(&address, "127.0.0.1");
+            enet_address_set_host_ip(&address, ip.c_str());
             address.port = 12345;
             peer = enet_host_connect(host, &address, 2, 0);
         }
@@ -91,6 +95,7 @@ public:
 
                     // Directly apply the received transform onto the remote peer entity
                     remotePeerPlayer.position = state->position;
+                    remotePeerPlayer.position = state->velocity;
                     remotePeerPlayer.angle = state->angle;
                 }
                 enet_packet_destroy(event.packet);
@@ -107,6 +112,7 @@ public:
         PeerStatePacket state;
         state.position = localPlayer.position;
         state.angle = localPlayer.angle;
+        state.velocity = localPlayer.velocity;
 
         ENetPacket *packet = enet_packet_create(&state, sizeof(PeerStatePacket), ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
 
