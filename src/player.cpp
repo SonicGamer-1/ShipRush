@@ -4,8 +4,9 @@
 
 const int PLAYER_SIZE = 64;
 
-void Player::load()
+void Player::load(std::vector<Bullet> *b)
 {
+    bullets = b;
     texture = LoadTexture("asset/image/player.png");
     position = {800, 800};
 }
@@ -27,7 +28,7 @@ void Player::update(float dt, bool peer)
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
         {
-            // bullet shoot
+            bullets->emplace_back(position, Vector2Normalize(GetMousePosition() - position) * 1000, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
             bulletT.reset();
         }
 
@@ -63,4 +64,8 @@ void Player::render()
 void Player::unload()
 {
     UnloadTexture(texture);
+}
+
+void Player::shoot()
+{
 }

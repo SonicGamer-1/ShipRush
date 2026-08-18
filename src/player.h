@@ -2,6 +2,9 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <vector>
+
+#include "bullet.h"
 
 class Timer
 {
@@ -40,8 +43,11 @@ public:
 
     Texture2D texture;
 
-    void load();
+    std::vector<Bullet> *bullets;
+
+    void load(std::vector<Bullet> *b);
     void update(float dt, bool peer);
     void render();
     void unload();
+    void shoot();
 };

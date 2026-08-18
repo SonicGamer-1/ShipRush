@@ -1,5 +1,7 @@
 #include <raylib.h>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include "player.h"
 #include "network.h"
 
@@ -23,10 +25,12 @@ int main(int argc, char *argv[])
     }
 
     Player localPlayer;
+    std::vector<Bullet> bullets;
     Player remotePeerPlayer;
+    std::vector<Bullet> enemBullets;
 
-    localPlayer.load();
-    remotePeerPlayer.load();
+    localPlayer.load(&bullets);
+    remotePeerPlayer.load(&enemBullets);
 
     // Set initial spawn points to distinguish entities
     if (mode == 'h')
@@ -55,12 +59,23 @@ int main(int argc, char *argv[])
 
         remotePeerPlayer.update(dt, true);
 
+        for (auto &bullet : bullets)
+            bullet.position += bullet.velocity * dt;
+
+        bullets.erase(
+            std::remove_if(bullets.begin(), bullets.end(), [](const Bullet &bullet)
+                           { return bullet.position.x < 0 || bullet.position.x > 1600 ||
+                                    bullet.position.y < 0 || bullet.position.y > 900; }),
+            bullets.end());
+
         // 4. Render
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         localPlayer.render();
         remotePeerPlayer.render();
+        for (auto &bullet : bullets)
+            bullet.render();
 
         DrawText(mode == 'h' ? "PEER A (Local)" : "PEER B (Local)", 20, 20, 20, MAROON);
         DrawFPS(20, 50);
