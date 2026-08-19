@@ -25,6 +25,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    if (mode == 'c')
+    {
+        std::cout << "Enter Host IP:\n";
+        std::cin >> netManager.ip;
+    }
+
     Player localPlayer;
     std::vector<Bullet> bullets;
     Player remotePeerPlayer;
@@ -73,7 +79,7 @@ int main(int argc, char *argv[])
 
         // 4. Render
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(GRAY);
 
         localPlayer.render();
         remotePeerPlayer.render();

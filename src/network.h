@@ -14,8 +14,6 @@
 
 #pragma pack(push, 1)
 
-std::string ip = "127.0.0.1";
-
 enum PacketType : uint8_t
 {
     PACKET_P2P_STATE = 1
@@ -40,6 +38,8 @@ private:
     bool isHostPeer = false;
 
 public:
+    std::string ip = "127.0.0.1";
+
     ~NetworkManager()
     {
         if (host)

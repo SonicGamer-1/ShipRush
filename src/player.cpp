@@ -6,7 +6,6 @@ void Player::load(std::vector<Bullet> *b)
 {
     bullets = b;
     texture = LoadTexture("asset/image/player.png");
-    position = {800, 800};
 }
 
 void Player::update(float dt, bool peer)
@@ -19,17 +18,17 @@ void Player::update(float dt, bool peer)
         bulletT.update(dt);
 
         if (IsKeyDown(KEY_A))
-            acceleration.x -= 1000.0f;
+            acceleration.x -= ACCEL;
 
         if (IsKeyDown(KEY_D))
-            acceleration.x += 1000.0f;
+            acceleration.x += ACCEL;
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
             shoot(peer);
 
         if (IsMouseButtonDown(1) && boostTimer <= 0)
         {
-            acceleration *= 100;
+            acceleration *= ACCEL_BOOST;
             boostT.reset();
         }
     }
@@ -44,8 +43,8 @@ void Player::update(float dt, bool peer)
         position.x = PLAYER_SIZE / 2, velocity *= -2;
 
     // Right boundary
-    if (position.x > 1600 - PLAYER_SIZE / 2)
-        position.x = 1600 - PLAYER_SIZE / 2, velocity *= -2;
+    if (position.x > WIN_W - PLAYER_SIZE / 2)
+        position.x = WIN_W - PLAYER_SIZE / 2, velocity *= -2;
 
     collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
 
@@ -66,5 +65,5 @@ void Player::unload()
 void Player::shoot(bool peer)
 {
     bulletT.reset();
-    bullets->emplace_back(position, Vector2Normalize(GetMousePosition() - position) * 1000, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
+    bullets->emplace_back(position, Vector2Normalize(GetMousePosition() - position) * BULLET_SPEED, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
 }
