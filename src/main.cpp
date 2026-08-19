@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "player.h"
 #include "network.h"
+#include "consts.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +14,7 @@ int main(int argc, char *argv[])
         mode = 'c'; // Client Peer
     }
 
-    InitWindow(1600, 900, mode == 'h' ? "P2P Game - Peer A" : "P2P Game - Peer B");
+    InitWindow(WIN_W, WIN_H, mode == 'h' ? "P2P Game - Peer A" : "P2P Game - Peer B");
     SetTargetFPS(120);
 
     NetworkManager netManager;
@@ -35,13 +36,13 @@ int main(int argc, char *argv[])
     // Set initial spawn points to distinguish entities
     if (mode == 'h')
     {
-        localPlayer.position = {800.0f, 100.0f};
-        remotePeerPlayer.position = {800.0f, 800.0f};
+        localPlayer.position = {WIN_W / 2.0f, WIN_H / 10.0f};
+        remotePeerPlayer.position = {WIN_W / 2.0f, WIN_H * 9.0f / 10.0f};
     }
     else
     {
-        localPlayer.position = {800.0f, 800.0f};
-        remotePeerPlayer.position = {800.0f, 100.0f};
+        localPlayer.position = {WIN_W / 2.0f, WIN_H * 9.0f / 10.0f};
+        remotePeerPlayer.position = {WIN_W / 2.0f, WIN_H / 10.0f};
     }
 
     while (!WindowShouldClose())
@@ -60,12 +61,14 @@ int main(int argc, char *argv[])
         remotePeerPlayer.update(dt, true);
 
         for (auto &bullet : bullets)
-            bullet.position += bullet.velocity * dt;
+            bullet.update(dt, remotePeerPlayer);
+        for (auto &bullet : enemBullets)
+            bullet.update(dt, localPlayer);
 
         bullets.erase(
             std::remove_if(bullets.begin(), bullets.end(), [](const Bullet &bullet)
-                           { return bullet.position.x < 0 || bullet.position.x > 1600 ||
-                                    bullet.position.y < 0 || bullet.position.y > 900; }),
+                           { return bullet.position.x < 0 || bullet.position.x > WIN_W ||
+                                    bullet.position.y < 0 || bullet.position.y > WIN_H; }),
             bullets.end());
 
         // 4. Render
@@ -75,6 +78,8 @@ int main(int argc, char *argv[])
         localPlayer.render();
         remotePeerPlayer.render();
         for (auto &bullet : bullets)
+            bullet.render();
+        for (auto &bullet : enemBullets)
             bullet.render();
 
         DrawText(mode == 'h' ? "PEER A (Local)" : "PEER B (Local)", 20, 20, 20, MAROON);

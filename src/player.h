@@ -6,6 +6,10 @@
 
 #include "bullet.h"
 
+#include "consts.h"
+
+class Bullet;
+
 class Timer
 {
     float &timer;
@@ -38,6 +42,8 @@ public:
 
     float bulletTimer = 0, boostTimer = 0;
 
+    Rectangle collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
+
     Timer boostT = Timer(boostTimer, 0.5);
     Timer bulletT = Timer(bulletTimer, 1);
 
@@ -49,5 +55,5 @@ public:
     void update(float dt, bool peer);
     void render();
     void unload();
-    void shoot();
+    void shoot(bool peer);
 };

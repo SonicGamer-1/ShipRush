@@ -2,8 +2,6 @@
 #include <cmath>
 #include <iostream>
 
-const int PLAYER_SIZE = 64;
-
 void Player::load(std::vector<Bullet> *b)
 {
     bullets = b;
@@ -27,10 +25,7 @@ void Player::update(float dt, bool peer)
             acceleration.x += 1000.0f;
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
-        {
-            bullets->emplace_back(position, Vector2Normalize(GetMousePosition() - position) * 1000, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
-            bulletT.reset();
-        }
+            shoot(peer);
 
         if (IsMouseButtonDown(1) && boostTimer <= 0)
         {
@@ -52,6 +47,8 @@ void Player::update(float dt, bool peer)
     if (position.x > 1600 - PLAYER_SIZE / 2)
         position.x = 1600 - PLAYER_SIZE / 2, velocity *= -2;
 
+    collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
+
     if (!peer)
         angle = 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x);
 }
@@ -66,6 +63,8 @@ void Player::unload()
     UnloadTexture(texture);
 }
 
-void Player::shoot()
+void Player::shoot(bool peer)
 {
+    bulletT.reset();
+    bullets->emplace_back(position, Vector2Normalize(GetMousePosition() - position) * 1000, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
 }
