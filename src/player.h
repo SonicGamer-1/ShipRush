@@ -45,7 +45,7 @@ public:
     Rectangle collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
 
     Timer boostT = Timer(boostTimer, 0.5);
-    Timer bulletT = Timer(bulletTimer, 1);
+    Timer bulletT = Timer(bulletTimer, 0.2);
 
     Texture2D texture;
 

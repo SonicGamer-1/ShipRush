@@ -17,11 +17,11 @@ void Player::update(float dt, bool peer)
         boostT.update(dt);
         bulletT.update(dt);
 
-        if (IsKeyDown(KEY_A))
-            acceleration.x -= ACCEL;
+        acceleration.x += ACCEL * (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+        acceleration.y -= ACCEL * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
 
-        if (IsKeyDown(KEY_D))
-            acceleration.x += ACCEL;
+        if ((IsKeyDown(KEY_D) - IsKeyDown(KEY_A)) && (IsKeyDown(KEY_W) - IsKeyDown(KEY_S)))
+            acceleration /= 1.4142;
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
             shoot(peer);
@@ -38,13 +38,14 @@ void Player::update(float dt, bool peer)
     velocity += acceleration * dt;
     position += velocity * dt;
 
-    // Left boundary
     if (position.x < PLAYER_SIZE / 2)
         position.x = PLAYER_SIZE / 2, velocity *= -2;
-
-    // Right boundary
     if (position.x > WIN_W - PLAYER_SIZE / 2)
         position.x = WIN_W - PLAYER_SIZE / 2, velocity *= -2;
+    if (position.y < PLAYER_SIZE / 2)
+        position.y = PLAYER_SIZE / 2, velocity *= -2;
+    if (position.y > WIN_H - PLAYER_SIZE / 2)
+        position.y = WIN_H - PLAYER_SIZE / 2, velocity *= -2;
 
     collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
 
