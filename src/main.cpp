@@ -18,17 +18,18 @@ int main(int argc, char *argv[])
     SetTargetFPS(120);
 
     NetworkManager netManager;
-    if (!netManager.initialize(mode))
-    {
-        std::cerr << "Failed to initialize P2P Network!" << std::endl;
-        CloseWindow();
-        return -1;
-    }
 
     if (mode == 'c')
     {
         std::cout << "Enter Host IP:\n";
         std::cin >> netManager.ip;
+    }
+
+    if (!netManager.initialize(mode))
+    {
+        std::cerr << "Failed to initialize P2P Network!" << std::endl;
+        CloseWindow();
+        return -1;
     }
 
     Player localPlayer;

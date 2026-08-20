@@ -1,6 +1,9 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -O2 -Wall -I./Src
-LDFLAGS = -lenet -lraylib -lws2_32 -lopengl32 -lgdi32 -lwinmm
+
+# Added -static and ensured proper system library ordering
+LDFLAGS = -static -lenet -lraylib -lws2_32 -lopengl32 -lgdi32 -lwinmm
+
 SRCDIR = Src
 OBJDIR = temp
 TARGET = ShipRush.exe

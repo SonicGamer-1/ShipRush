@@ -67,7 +67,7 @@ void Player::update(float dt, bool peer)
 void Player::render()
 {
     DrawTexturePro(texture, {0, 0, 16, 16}, {position.x, position.y, PLAYER_SIZE, PLAYER_SIZE}, {PLAYER_SIZE / 2, PLAYER_SIZE / 2}, angle, WHITE);
-    DrawRectangle(mousePos.x, mousePos.y, 10, 1, RED);
+    DrawRectangle(mousePos.x, mousePos.y, 10, 10, RED);
 }
 
 void Player::unload()
