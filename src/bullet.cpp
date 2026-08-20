@@ -1,11 +1,16 @@
 #include "bullet.h"
+#include <iostream>
 
-void Bullet::update(float dt, const Player &e)
+void Bullet::update(float dt, const Player &e, int &score)
 {
     position += velocity * dt;
     collider = {position.x - 3.0f, position.y - 10.0f, 6.0f, 20.0f};
     if (CheckCollisionRecs(e.collider, collider))
+    {
         position = Vector2{-WIN_W, -WIN_H};
+        score++;
+        std::cout << score;
+    }
 };
 
 void Bullet::render()

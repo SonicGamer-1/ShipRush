@@ -34,8 +34,14 @@ int main(int argc, char *argv[])
 
     Player localPlayer;
     std::vector<Bullet> bullets;
+    int score = 0;
     Player remotePeerPlayer;
     std::vector<Bullet> enemBullets;
+    int enemScore = 0;
+
+    Font scoreF = LoadFontEx("asset/font/scoreFont.ttf", 64, 0, 0);
+    Vector2 textSize;
+    Vector2 enemTextSize;
 
     localPlayer.load(&bullets);
     remotePeerPlayer.load(&enemBullets);
@@ -68,9 +74,9 @@ int main(int argc, char *argv[])
         remotePeerPlayer.update(dt, true);
 
         for (auto &bullet : bullets)
-            bullet.update(dt, remotePeerPlayer);
+            bullet.update(dt, remotePeerPlayer, score);
         for (auto &bullet : enemBullets)
-            bullet.update(dt, localPlayer);
+            bullet.update(dt, localPlayer, enemScore);
 
         bullets.erase(
             std::remove_if(bullets.begin(), bullets.end(), [](const Bullet &bullet)
@@ -89,8 +95,10 @@ int main(int argc, char *argv[])
         for (auto &bullet : enemBullets)
             bullet.render();
 
-        DrawText(mode == 'h' ? "PEER A (Local)" : "PEER B (Local)", 20, 20, 20, MAROON);
-        DrawFPS(20, 50);
+        textSize = MeasureTextEx(scoreF, std::to_string(score).c_str(), 18, 1);
+        DrawTextPro(scoreF, std::to_string(score).c_str(), {WIN_W / 2, WIN_H / 32 - textSize.y}, textSize / 2.0f, 0.0f, 64, 1, BLUE);
+        enemTextSize = MeasureTextEx(scoreF, std::to_string(score).c_str(), 18, 1);
+        DrawTextPro(scoreF, std::to_string(enemScore).c_str(), {WIN_W / 2, WIN_H * 31 / 32 - enemTextSize.y}, enemTextSize / 2.0f, 0.0f, 64, 1, RED);
 
         EndDrawing();
     }

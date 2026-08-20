@@ -28,7 +28,7 @@ public:
     Bullet(Vector2 pos, Vector2 vel, Shooter shooterType, float ang)
         : position(pos), velocity(vel), shooter(shooterType), angle(ang) {}
 
-    void update(float dt, const Player &e);
+    void update(float dt, const Player &e, int &score);
 
     void render();
 };
