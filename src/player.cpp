@@ -10,6 +10,14 @@ void Player::load(std::vector<Bullet> *b)
 
 void Player::update(float dt, bool peer)
 {
+    mousePos = GetMousePosition();
+
+    if (shot)
+    {
+        shoot(peer);
+        shot = false;
+    }
+
     if (!peer)
     {
         acceleration = {0};
@@ -24,7 +32,9 @@ void Player::update(float dt, bool peer)
             acceleration /= 1.4142;
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
-            shoot(peer);
+        {
+            shot = true;
+        }
 
         if (IsMouseButtonDown(1) && boostTimer <= 0)
         {
@@ -38,7 +48,7 @@ void Player::update(float dt, bool peer)
     velocity += acceleration * dt;
     position += velocity * dt;
 
-    if (position.x < PLAYER_SIZE / 2)
+        if (position.x < PLAYER_SIZE / 2)
         position.x = PLAYER_SIZE / 2, velocity *= -2;
     if (position.x > WIN_W - PLAYER_SIZE / 2)
         position.x = WIN_W - PLAYER_SIZE / 2, velocity *= -2;
@@ -56,6 +66,7 @@ void Player::update(float dt, bool peer)
 void Player::render()
 {
     DrawTexturePro(texture, {0, 0, 16, 16}, {position.x, position.y, PLAYER_SIZE, PLAYER_SIZE}, {PLAYER_SIZE / 2, PLAYER_SIZE / 2}, angle, WHITE);
+    DrawRectangle(mousePos.x, mousePos.y, 1, 1, RED);
 }
 
 void Player::unload()

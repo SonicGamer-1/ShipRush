@@ -9,8 +9,10 @@
 #include <iostream>
 #include <cstdint>
 #include <cstring>
+#include <vector>
 
 #include "player.h"
+#include "bullet.h"
 
 #pragma pack(push, 1)
 
@@ -26,6 +28,8 @@ struct PeerStatePacket
     Vector2 position;
     Vector2 velocity;
     float angle;
+    Vector2 mousePos;
+    bool shot;
 };
 
 #pragma pack(pop)
@@ -97,6 +101,8 @@ public:
                     remotePeerPlayer.position = state->position;
                     remotePeerPlayer.velocity = state->velocity;
                     remotePeerPlayer.angle = state->angle;
+                    remotePeerPlayer.mousePos = state->mousePos;
+                    remotePeerPlayer.shot = state->shot;
                 }
                 enet_packet_destroy(event.packet);
             }
@@ -113,6 +119,8 @@ public:
         state.position = localPlayer.position;
         state.angle = localPlayer.angle;
         state.velocity = localPlayer.velocity;
+        state.mousePos = localPlayer.mousePos;
+        state.shot = localPlayer.shot;
 
         ENetPacket *packet = enet_packet_create(&state, sizeof(PeerStatePacket), ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
 

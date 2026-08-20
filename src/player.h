@@ -50,6 +50,8 @@ public:
     Texture2D texture;
 
     std::vector<Bullet> *bullets;
+    bool shot;
+    Vector2 mousePos;
 
     void load(std::vector<Bullet> *b);
     void update(float dt, bool peer);
