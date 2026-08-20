@@ -78,5 +78,5 @@ void Player::unload()
 void Player::shoot(bool peer)
 {
     bulletT.reset();
-    bullets->emplace_back(position, Vector2Normalize(mousePos - position) * BULLET_SPEED, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(GetMousePosition().y - position.y, GetMousePosition().x - position.x));
+    bullets->emplace_back(position, Vector2Normalize(mousePos - position) * BULLET_SPEED, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(mousePos.y - position.y, mousePos.x - position.x));
 }
