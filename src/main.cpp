@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
     }
 
     InitWindow(WIN_W, WIN_H, mode == 'h' ? "P2P Game - Peer A" : "P2P Game - Peer B");
-    SetTargetFPS(120);
+    // SetTargetFPS(120);
+    InitAudioDevice();
 
     NetworkManager netManager;
 
@@ -38,6 +39,8 @@ int main(int argc, char *argv[])
     Player remotePeerPlayer;
     std::vector<Bullet> enemBullets;
     int enemScore = 0;
+
+    Sound bulletShot = LoadSound("asset/audio/bulletShot.ogg");
 
     Font scoreF = LoadFontEx("asset/font/scoreFont.ttf", 64, 0, 0);
     Vector2 textSize;
@@ -62,21 +65,15 @@ int main(int argc, char *argv[])
     {
         float dt = GetFrameTime();
 
-        // 1. Both peers update their OWN player locally with zero lag
         localPlayer.update(dt, false);
-
-        // 2. Receive position & angle updates from the other peer
         netManager.serviceNetwork(remotePeerPlayer);
-
-        // 3. Transmit local position & angle to the other peer
         netManager.sendLocalState(localPlayer);
-
         remotePeerPlayer.update(dt, true);
 
         for (auto &bullet : bullets)
-            bullet.update(dt, remotePeerPlayer, score);
+            bullet.update(dt, remotePeerPlayer, score, &bulletShot);
         for (auto &bullet : enemBullets)
-            bullet.update(dt, localPlayer, enemScore);
+            bullet.update(dt, localPlayer, enemScore, &bulletShot);
 
         bullets.erase(
             std::remove_if(bullets.begin(), bullets.end(), [](const Bullet &bullet)
@@ -84,7 +81,6 @@ int main(int argc, char *argv[])
                                     bullet.position.y < 0 || bullet.position.y > WIN_H; }),
             bullets.end());
 
-        // 4. Render
         BeginDrawing();
         ClearBackground(GRAY);
 
@@ -99,7 +95,7 @@ int main(int argc, char *argv[])
         DrawTextPro(scoreF, std::to_string(score).c_str(), {WIN_W / 2, WIN_H / 32 - textSize.y}, textSize / 2.0f, 0.0f, 64, 1, BLUE);
         enemTextSize = MeasureTextEx(scoreF, std::to_string(score).c_str(), 18, 1);
         DrawTextPro(scoreF, std::to_string(enemScore).c_str(), {WIN_W / 2, WIN_H * 31 / 32 - enemTextSize.y}, enemTextSize / 2.0f, 0.0f, 64, 1, RED);
-
+        // DrawFPS(10, 100);
         EndDrawing();
     }
 

@@ -1,7 +1,6 @@
 #include "bullet.h"
-#include <iostream>
 
-void Bullet::update(float dt, const Player &e, int &score)
+void Bullet::update(float dt, Player &e, int &score, Sound *shot)
 {
     position += velocity * dt;
     collider = {position.x - 3.0f, position.y - 10.0f, 6.0f, 20.0f};
@@ -9,7 +8,8 @@ void Bullet::update(float dt, const Player &e, int &score)
     {
         position = Vector2{-WIN_W, -WIN_H};
         score++;
-        std::cout << score;
+        PlaySound(*shot);
+        e.isShot = true;
     }
 };
 
