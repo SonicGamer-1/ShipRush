@@ -10,12 +10,11 @@
 
 class Bullet;
 
-class Timer
+struct Timer
 {
     float &timer;
     float limit = 0;
 
-public:
     Timer(float &T, float L)
         : timer(T), limit(L) {}
 

@@ -1,0 +1,19 @@
+# Build artifacts
+temp/
+
+# Compiled output
+*.exe
+*.o
+*.obj
+*.dll
+*.lib
+*.a
+
+# Editor / IDE
+.vscode/
+.vs/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
