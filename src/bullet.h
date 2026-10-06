@@ -23,7 +23,7 @@ public:
     Shooter shooter;
     float angle = 0;
 
-    Rectangle collider = {position.x - 3.0f, position.y - 10.0f, 6.0f, 20.0f};
+    Rectangle collider = {position.x - BULLET_COLLIDER_OFFSET_X, position.y - BULLET_COLLIDER_OFFSET_Y, BULLET_WIDTH, BULLET_HEIGHT};
 
     Bullet(Vector2 pos, Vector2 vel, Shooter shooterType, float ang)
         : position(pos), velocity(vel), shooter(shooterType), angle(ang) {}

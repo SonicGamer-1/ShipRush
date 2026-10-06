@@ -1,5 +1,7 @@
 # ShipRush
 
+Current version: **v1.0.0**
+
 A peer-to-peer 2D arena shooter built with [raylib](https://www.raylib.com/) and [ENet](http://enet.bespin.org/).
 
 ## About

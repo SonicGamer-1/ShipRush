@@ -3,7 +3,7 @@
 void Bullet::update(float dt, Player &e, int &score, Sound *shot)
 {
     position += velocity * dt;
-    collider = {position.x - 3.0f, position.y - 10.0f, 6.0f, 20.0f};
+    collider = {position.x - BULLET_COLLIDER_OFFSET_X, position.y - BULLET_COLLIDER_OFFSET_Y, BULLET_WIDTH, BULLET_HEIGHT};
     if (CheckCollisionRecs(e.collider, collider))
     {
         position = Vector2{-WIN_W, -WIN_H};
@@ -16,8 +16,8 @@ void Bullet::update(float dt, Player &e, int &score, Sound *shot)
 void Bullet::render()
 {
     DrawRectanglePro(
-        Rectangle{position.x, position.y, 6.0f, 20.0f},
-        Vector2{3.0f, 10.0f},
+        Rectangle{position.x, position.y, BULLET_WIDTH, BULLET_HEIGHT},
+        Vector2{BULLET_COLLIDER_OFFSET_X, BULLET_COLLIDER_OFFSET_Y},
         angle,
         BLACK);
 }

@@ -8,6 +8,7 @@ temp/
 *.dll
 *.lib
 *.a
+*.zip
 
 # Editor / IDE
 .vscode/

@@ -42,7 +42,7 @@ private:
     bool isHostPeer = false;
 
 public:
-    std::string ip = "127.0.0.1";
+    std::string ip = DEFAULT_IP;
 
     ~NetworkManager()
     {
@@ -61,17 +61,17 @@ public:
 
         if (isHostPeer)
         {
-            // Peer A: Listens on port 12345
+            // Peer A: Listens on the configured game port
             address.host = ENET_HOST_ANY;
-            address.port = 12345;
+            address.port = NETWORK_PORT;
             host = enet_host_create(&address, 32, 2, 0, 0);
         }
         else
         {
-            // Peer B: Connects to Peer A on port 12345
+            // Peer B: Connects to Peer A on the configured game port
             host = enet_host_create(nullptr, 1, 2, 0, 0);
             enet_address_set_host_ip(&address, ip.c_str());
-            address.port = 12345;
+            address.port = NETWORK_PORT;
             peer = enet_host_connect(host, &address, 2, 0);
         }
         return host != nullptr;

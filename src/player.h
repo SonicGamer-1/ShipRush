@@ -37,14 +37,14 @@ public:
     Vector2 velocity = {0};
     Vector2 acceleration = {0};
 
-    float angle = 180;
+    float angle = HALF_ROTATION;
 
     float bulletTimer = 0, boostTimer = 0, isShotTimer = 0;
 
     Rectangle collider;
 
-    Timer boostT = Timer(boostTimer, 0.5);
-    Timer bulletT = Timer(bulletTimer, 0.2);
+    Timer boostT = Timer(boostTimer, PLAYER_BOOST_DURATION);
+    Timer bulletT = Timer(bulletTimer, PLAYER_SHOT_COOLDOWN);
     Sound bulletSound;
 
     Texture2D texture;
@@ -52,7 +52,7 @@ public:
     std::vector<Bullet> *bullets;
     bool shot = false;
     bool isShot = false;
-    Timer isShotT = Timer(isShotTimer, 0.2);
+    Timer isShotT = Timer(isShotTimer, PLAYER_SHOT_FLASH_TIME);
     Vector2 mousePos;
 
     void load(std::vector<Bullet> *b);

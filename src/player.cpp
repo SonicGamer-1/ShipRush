@@ -47,7 +47,7 @@ void Player::update(float dt, bool peer)
         acceleration.y -= ACCEL * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
 
         if ((IsKeyDown(KEY_D) - IsKeyDown(KEY_A)) && (IsKeyDown(KEY_W) - IsKeyDown(KEY_S)))
-            acceleration /= 1.4142;
+            acceleration /= DIAGONAL_NORMALIZE;
 
         if (IsMouseButtonDown(0) && bulletTimer <= 0)
             shot = true;
@@ -58,7 +58,7 @@ void Player::update(float dt, bool peer)
 
     velocity = Vector2Scale(velocity, exp(-5 * dt));
 
-    if (boostTimer > 0.45)
+    if (boostTimer > PLAYER_BOOST_THRESHOLD)
         acceleration *= ACCEL_BOOST;
 
     velocity += acceleration * dt;
@@ -76,7 +76,7 @@ void Player::update(float dt, bool peer)
     collider = {position.x - PLAYER_SIZE / 2, position.y - PLAYER_SIZE / 2, PLAYER_SIZE, PLAYER_SIZE};
 
     if (!peer)
-        angle = 90.0f + (180.0f / PI) * atan2f(mousePos.y - position.y, mousePos.x - position.x);
+        angle = PLAYER_ANGLE_OFFSET + (HALF_ROTATION / PI) * atan2f(mousePos.y - position.y, mousePos.x - position.x);
 }
 
 void Player::render()
@@ -85,8 +85,8 @@ void Player::render()
     if (isShotTimer > 0 && isShot && fmodf(isShotTimer, 0.02f) < 0.01f)
         flashColor = BLACK;
 
-    DrawTexturePro(texture, {0, 0, 16, 16}, {position.x, position.y, PLAYER_SIZE, PLAYER_SIZE}, {PLAYER_SIZE / 2, PLAYER_SIZE / 2}, angle, flashColor);
-    DrawRectangle(mousePos.x, mousePos.y, 10, 10, RED);
+    DrawTexturePro(texture, {0, 0, PLAYER_TEXTURE_SIZE, PLAYER_TEXTURE_SIZE}, {position.x, position.y, PLAYER_SIZE, PLAYER_SIZE}, {PLAYER_SIZE / 2, PLAYER_SIZE / 2}, angle, flashColor);
+    DrawRectangle(mousePos.x, mousePos.y, MOUSE_CURSOR_SIZE, MOUSE_CURSOR_SIZE, RED);
 }
 
 void Player::unload()
@@ -98,6 +98,6 @@ void Player::unload()
 void Player::shoot(bool peer)
 {
     bulletT.reset();
-    bullets->emplace_back(position, Vector2Normalize(mousePos - position) * BULLET_SPEED, peer ? ENEMY : PLAYER, 90.0f + (180.0f / PI) * atan2f(mousePos.y - position.y, mousePos.x - position.x));
+    bullets->emplace_back(position, Vector2Normalize(mousePos - position) * BULLET_SPEED, peer ? ENEMY : PLAYER, PLAYER_ANGLE_OFFSET + (HALF_ROTATION / PI) * atan2f(mousePos.y - position.y, mousePos.x - position.x));
     PlaySound(bulletSound);
 }
